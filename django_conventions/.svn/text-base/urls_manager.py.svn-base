@@ -1,0 +1,22 @@
+from introspector import Introspector
+import popupsports.popups.views as views_root
+
+class UrlsManager(object):
+    
+    instrospector = Introspector()
+    
+    def __init__(self, urlpatterns):
+        
+        self.urlpatterns = urlpatterns
+        self.add_views()
+    
+    def add_views(self):
+        
+        views = self.instrospector.infer_views(views_root)
+        
+        for view in views:
+
+            django_urls = self.instrospector.get_django_urls(view)
+            
+            for url in django_urls:
+                self.urlpatterns.append(url)

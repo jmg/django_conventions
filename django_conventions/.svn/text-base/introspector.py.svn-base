@@ -1,0 +1,72 @@
+import pkgutil
+
+from django.conf.urls.defaults import url as djangourl
+from django.contrib.auth.decorators import login_required
+from popupsports.popups.utils.django_utils import is_valid_view
+
+import convetions
+
+
+class Introspector(object):
+    
+    def infer_views(self, views_root):
+        
+        views = []
+        
+        for loader, module_name, is_pkg in pkgutil.walk_packages(views_root.__path__, "%s." % views_root.__name__):
+            if not is_pkg:
+                views.extend(self._get_module_views(loader, module_name, views_root))
+        
+        return views
+        
+    def _get_module_views(self, loader, module_name, views_root):
+        
+        module = loader.find_module(module_name).load_module(module_name)
+        return [value for value in module.__dict__.values() if is_valid_view(value, views_root.__name__)]
+    
+    def get_django_urls(self, view):
+        
+        return self._get_urls(view)
+    
+    def _infer_methods(self, view):
+        
+        self._infer_template(view)
+        self._infer_url(view)
+        return view
+        
+    def _infer_template(self, view):
+        
+        if "template_name" not in view.__dict__:
+            view.template_name = convetions.get_template_name(view)
+    
+    def _infer_url(self, view):
+        
+        if "url" not in view.__dict__:
+            view.url = convetions.get_url(view)
+    
+    def _check_for_boolean(self, view, django_view, name, apply_function):
+        
+        if not hasattr(view, name) or not view.__dict__[name]:
+            django_view = apply_function(django_view)
+        return django_view
+        
+    def _get_urls(self, view):
+        
+        view = self._infer_methods(view)
+        
+        django_view = view.as_view()
+        django_view = self._check_for_boolean(view, django_view, "login_exempt", login_required)
+        
+        if isinstance(view.url, list):
+            return [self._get_django_url(django_view, view, url) for url in view.url]
+        else:
+            return [self._get_django_url(django_view, view, view.url)]
+            
+    def _get_django_url(self, django_view, view, url):
+    
+        params = self._check_for_params(view)
+        return djangourl(url, django_view, params)
+
+    def _check_for_params(self, view):
+        
+        return getattr(view, 'url_params', {})
