@@ -9,10 +9,10 @@ setup(
     author="Juan Manuel García",
     author_email = "jmg.utn@gmail.com",
     license = "GPL v3",
-    keywords = "Scraping Crawling Framework Python",
+    keywords = "Django Routing Convetion Over Configuration",
     packages=find_packages(exclude=["tests"]),
     install_requires=[
         "django",
     ],
-    url='https://github.com/jmg',
+    url='https://github.com/jmg/django_conventions',
 )
