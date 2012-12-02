@@ -1,16 +1,41 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from django.test.client import Client
+
+client = Client()
+
+class RoutingTest(TestCase):
+
+    def test_convention_url(self):
+        
+        response = client.get("/index/main/")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "index.main")
+
+    def test_url_attribute(self):
+
+        response = client.get("/my/url/")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "index.whatever")
+
+    def test_url_attribute(self):
+
+        response = client.get("/my/url2/")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "index.whatever2")
+
+    def test_url_list_attribute(self):
+
+        response = client.get("/list/url1/")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "index.listofurls")
+
+        response = client.get("/list/url2/")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "index.listofurls")
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class RESTRoutingTest(TestCase):
+
+    def test_rest_view(self):
+
+        pass
