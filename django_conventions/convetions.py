@@ -7,7 +7,9 @@ def _get_module(view):
 
 def _get_name(view):
 
-    return view.__name__[:-len(END_VIEW_NAME)].lower()
+    if END_VIEW_NAME in view.__name__:
+        return view.__name__[:-len(END_VIEW_NAME)].lower()
+    return view.__name__.lower()
 
 def get_template_name(view):
 

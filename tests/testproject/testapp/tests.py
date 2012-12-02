@@ -3,39 +3,51 @@ from django.test.client import Client
 
 client = Client()
 
+def assert_response_ok(test_case, response, response_content):
+
+    test_case.assertEquals(response.status_code, 200)
+    test_case.assertEquals(response.content, response_content)
+
+
 class RoutingTest(TestCase):
 
     def test_convention_url(self):
         
         response = client.get("/index/main/")
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.content, "index.main")
+        assert_response_ok(self, response, "index.main")
+
+    def test_template_render(self):
+
+        response = client.get("/index/maintemplate/")
+        assert_response_ok(self, response, "main template content")
 
     def test_url_attribute(self):
 
         response = client.get("/my/url/")
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.content, "index.whatever")
+        assert_response_ok(self, response, "index.whatever")
 
-    def test_url_attribute(self):
+    def test_url_attribute2(self):
 
         response = client.get("/my/url2/")
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.content, "index.whatever2")
+        assert_response_ok(self, response, "index.whatever2")
 
     def test_url_list_attribute(self):
 
         response = client.get("/list/url1/")
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.content, "index.listofurls")
+        assert_response_ok(self, response, "index.listofurls")        
 
         response = client.get("/list/url2/")
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.content, "index.listofurls")
+        assert_response_ok(self, response, "index.listofurls")
+
+    def test_view_wthout_view_ending_name(self):
+
+        response = client.get("/index/named/")
+        assert_response_ok(self, response, "named template content")
 
 
 class RESTRoutingTest(TestCase):
 
-    def test_rest_view(self):
+    def test_get(self):
 
         pass
+

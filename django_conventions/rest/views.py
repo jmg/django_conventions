@@ -1,0 +1,3 @@
+class RESTView(object):
+
+    pass

@@ -157,3 +157,6 @@ LOGGING = {
         },
     }
 }
+
+import sys
+sys.path.insert(0, "../django_conventions")
