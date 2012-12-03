@@ -47,7 +47,21 @@ class RoutingTest(TestCase):
 
 class RESTRoutingTest(TestCase):
 
-    def test_get(self):
+    methods = ["get", "post", "put", "delete"]
 
-        pass
+    def test_rest_http_methods(self):
 
+        for method in self.methods:
+
+            response = getattr(client, method)("/comment/")
+            assert_response_ok(self, response, method)
+
+            response = getattr(client, method)("/comment/1/")
+            assert_response_ok(self, response, method)
+
+    def test_rest_params_response(self):
+
+        for method in self.methods:
+
+            response = getattr(client, method)("/comment_with_params/1/")
+            assert_response_ok(self, response, "%s1" % method)

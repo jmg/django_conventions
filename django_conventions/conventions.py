@@ -26,3 +26,7 @@ def get_url(view):
         return r"^%s/$" % module
 
     return r"^%s/%s/$" % (module, name)
+
+def get_resource(view):
+
+    return _get_name(view)

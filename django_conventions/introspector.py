@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_view_exempt
 from utils import is_valid_view
 
-import convetions
+from rest import RESTView
+
+import conventions
 
 
 class Introspector(object):
@@ -26,10 +28,13 @@ class Introspector(object):
         return [value for value in module.__dict__.values() if is_valid_view(value, views_root.__name__)]
 
     def get_django_urls(self, view):
-
+        
         return self._get_urls(view)
 
     def _infer_methods(self, view):
+
+        if issubclass(view, RESTView):
+            return view._infer_rest_urls()
 
         self._infer_template(view)
         self._infer_url(view)
@@ -38,12 +43,12 @@ class Introspector(object):
     def _infer_template(self, view):
 
         if "template_name" not in view.__dict__:
-            view.template_name = convetions.get_template_name(view)
+            view.template_name = conventions.get_template_name(view)
 
     def _infer_url(self, view):
 
         if "url" not in view.__dict__:
-            view.url = convetions.get_url(view)
+            view.url = conventions.get_url(view)
 
     def _check_for_boolean(self, view, django_view, name, apply_function, negative=False):
 
