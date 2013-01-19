@@ -50,10 +50,14 @@ class Introspector(object):
         if "url" not in view.__dict__:
             view.url = conventions.get_url(view)
 
-    def _check_for_boolean(self, view, django_view, name, apply_function, negative=False):
+    def _check_for_boolean(self, view, django_view, name, apply_function, default=False, negative=False):
 
-        boolean = getattr(view, name, False)
-        if negative and not boolean or not negative and boolean:
+        boolean = getattr(view, name, default)
+        
+        if negative:
+            boolean = not boolean
+
+        if boolean:
             django_view = apply_function(django_view)
         return django_view
 
@@ -62,7 +66,7 @@ class Introspector(object):
         view = self._infer_methods(view)
 
         django_view = view.as_view()
-        django_view = self._check_for_boolean(view, django_view, "login_exempt", login_required)
+        django_view = self._check_for_boolean(view, django_view, "login_exempt", login_required, default=True, negative=True)
         django_view = self._check_for_boolean(view, django_view, "csrf_exempt", csrf_view_exempt)
 
         if isinstance(view.url, list):
