@@ -44,6 +44,16 @@ class RoutingTest(TestCase):
         response = client.get("/index/named/")
         assert_response_ok(self, response, "named template content")
 
+    def test_view_namespaced(self):
+
+        response = client.get("/mynamespace/index/namespaced/")
+        assert_response_ok(self, response, "namespaced view")
+
+    def test_view_another_namespaced(self):
+
+        response = client.get("/anothernamespace/index/anothernamespaced/")
+        assert_response_ok(self, response, "another namespaced view")
+
 
 class RESTRoutingTest(TestCase):
 

@@ -1,9 +1,10 @@
 END_VIEW_NAME = "View"
-INDEX_VIEW_PREFIX = "Index"
+INDEX_VIEW_PREFIX = "index/"
 
 def _get_module(view):
 
-    return view.__module__.split(".")[-1]
+    module = view.__module__.split(".")[-1]
+    return r"%s/" % module
 
 def _get_name(view):
 
@@ -11,21 +12,31 @@ def _get_name(view):
         return view.__name__[:-len(END_VIEW_NAME)].lower()
     return view.__name__.lower()
 
-def get_template_name(view):
+def _get_namespace(view):
 
+    if hasattr(view, "namespace") and view.namespace is not None:
+        return r"%s/" % view.namespace
+    return ""
+
+def get_template_name(view):
+    
+    namespace = _get_namespace(view)
     module = _get_module(view)
     name = _get_name(view)
-    return "%s/%s.html" % (module, name)
+    return "%s%s%s.html" % (namespace, module, name)
 
 def get_url(view):
 
-    module = _get_module(view)
-    name = _get_name(view)
+    url = r"^"
+    url += _get_namespace(view)
+    url += _get_module(view)
+    url += _get_name(view)
 
-    if name == INDEX_VIEW_PREFIX.lower():
-        return r"^%s/$" % module
+    if url.endswith(INDEX_VIEW_PREFIX):
+        url = url[:-len(INDEX_VIEW_PREFIX)]
 
-    return r"^%s/%s/$" % (module, name)
+    url += r"/$"
+    return url
 
 def get_resource(view):
 

@@ -6,6 +6,7 @@ admin.autodiscover()
 
 from django_conventions import UrlsManager
 import testapp.views as root
+import testapp.namespaced_views as namespaced_root
 
 
 urlpatterns = patterns('',
@@ -21,3 +22,4 @@ urlpatterns = patterns('',
 )
 
 UrlsManager(urlpatterns, root)
+UrlsManager(urlpatterns, namespaced_root, namespace="mynamespace")

@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django_conventions",
-    version="0.1.1",
+    version="0.1.2",
     description="Django Convention Over Configuration",
     author="Juan Manuel García",
     author_email = "jmg.utn@gmail.com",
