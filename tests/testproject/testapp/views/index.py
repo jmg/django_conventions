@@ -13,6 +13,17 @@ class MainView(TemplateView):
         return HttpResponse("index.main")
 
 
+class IndexView(TemplateView):
+    """
+        The url for this class should be /index/ 
+        (based on the file and that it is an index view)
+    """
+
+    def get(self, *args, **kwargs):
+
+        return HttpResponse("index.index")
+
+
 class MainTemplateView(TemplateView):
     """
         The url for this class should be /index/maintemplate/ 

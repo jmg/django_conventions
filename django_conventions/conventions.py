@@ -1,5 +1,5 @@
 END_VIEW_NAME = "View"
-INDEX_VIEW_PREFIX = "index/"
+INDEX_VIEW_PREFIX = "index"
 
 def _get_module(view):
 
@@ -30,12 +30,13 @@ def get_url(view):
     url = r"^"
     url += _get_namespace(view)
     url += _get_module(view)
-    url += _get_name(view)
 
-    if url.endswith(INDEX_VIEW_PREFIX):
-        url = url[:-len(INDEX_VIEW_PREFIX)]
+    name = _get_name(view)
+    if name != INDEX_VIEW_PREFIX:
+        url += r"%s/$" % name
+    else:
+        url += r"$"
 
-    url += r"/$"
     return url
 
 def get_resource(view):

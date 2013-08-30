@@ -16,6 +16,11 @@ class RoutingTest(TestCase):
         response = client.get("/index/main/")
         assert_response_ok(self, response, "index.main")
 
+    def test_index_convention_url(self):
+        
+        response = client.get("/index/")
+        assert_response_ok(self, response, "index.index")
+
     def test_template_render(self):
 
         response = client.get("/index/maintemplate/")
