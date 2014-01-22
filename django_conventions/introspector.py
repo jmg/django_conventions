@@ -1,13 +1,13 @@
 import pkgutil
 
-from django.conf.urls.defaults import url as djangourl
+from django.conf.urls import url as djangourl
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_view_exempt
-from utils import is_valid_view
+from django.views.decorators.csrf import csrf_exempt
+from .utils import is_valid_view
 
-from rest import RESTView
+from .rest import RESTView
 
-import conventions
+from . import conventions
 
 
 class Introspector(object):
@@ -25,7 +25,7 @@ class Introspector(object):
     def _get_module_views(self, loader, module_name, views_root):
 
         module = loader.find_module(module_name).load_module(module_name)
-        return [value for value in module.__dict__.values() if is_valid_view(value, views_root.__name__)]
+        return [value for value in list(module.__dict__.values()) if is_valid_view(value, views_root.__name__)]
 
     def get_django_urls(self, view):
         
@@ -67,7 +67,7 @@ class Introspector(object):
 
         django_view = view.as_view()
         django_view = self._check_for_boolean(view, django_view, "login_exempt", login_required, default=True, negative=True)
-        django_view = self._check_for_boolean(view, django_view, "csrf_exempt", csrf_view_exempt)
+        django_view = self._check_for_boolean(view, django_view, "csrf_exempt", csrf_exempt)
 
         if isinstance(view.url, list):
             return [self._get_django_url(django_view, view, url) for url in view.url]

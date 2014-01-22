@@ -1,7 +1,7 @@
 ### Django Convention Over Configuration Urls Routing
 
 
-Rails-like Convention Over Configuration Urls Routing for your Django Projects. (Yeah, forget about urls.py!)
+Convention Over Configuration Urls Routing and Templates Rendering for your Django Projects. (Yeah, forget about urls.py!)
 
 <br>
 #### Installation 
@@ -15,7 +15,14 @@ Rails-like Convention Over Configuration Urls Routing for your Django Projects. 
 ```bash
 ~$ sh run_tests.sh
 ```
+
+### Support
+
+- python 2.7
+- python 3.2+ (Since version 0.2.0)
+
 <br>
+
 ### How it works
 
 django_conventions uses **introspection** the infer your views **files and classes** (at this moment it just works with [django class based views](https://docs.djangoproject.com/en/dev/topics/class-based-views/)). In order to start using it you just have to open your urls.py file (this will be the first and last time you open it) and add the following code:

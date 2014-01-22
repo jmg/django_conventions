@@ -1,1 +1,1 @@
-from views import RESTView
+from .views import RESTView

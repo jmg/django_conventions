@@ -1,4 +1,4 @@
-from introspector import Introspector
+from .introspector import Introspector
 
 
 class UrlsManager(object):

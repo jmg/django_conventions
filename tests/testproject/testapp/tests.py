@@ -5,8 +5,8 @@ client = Client()
 
 def assert_response_ok(test_case, response, response_content):
 
-    test_case.assertEquals(response.status_code, 200)
-    test_case.assertEquals(response.content, response_content)
+    test_case.assertEqual(response.status_code, 200)
+    test_case.assertEqual(response.content, response_content.encode('UTF-8'))
 
 
 class RoutingTest(TestCase):

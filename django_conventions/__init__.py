@@ -1,4 +1,4 @@
-__version__ = "0.1.3"
+__version__ = "0.2.0"
 __author__ = "Juan Manuel Garcia"
 
-from urls_manager import UrlsManager
+from .urls_manager import UrlsManager
