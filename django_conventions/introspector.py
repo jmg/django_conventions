@@ -1,6 +1,11 @@
 import pkgutil
 
-from django.conf.urls import url as djangourl
+try:
+    from django.conf.urls import url as djangourl
+except ImportError:
+    #for django 3 and 4
+    from django.urls import re_path as djangourl
+
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .utils import is_valid_view
@@ -28,7 +33,7 @@ class Introspector(object):
         return [value for value in list(module.__dict__.values()) if is_valid_view(value, views_root.__name__)]
 
     def get_django_urls(self, view):
-        
+
         return self._get_urls(view)
 
     def _infer_methods(self, view):
@@ -53,7 +58,7 @@ class Introspector(object):
     def _check_for_boolean(self, view, django_view, name, apply_function, default=False, negative=False):
 
         boolean = getattr(view, name, default)
-        
+
         if negative:
             boolean = not boolean
 
@@ -71,7 +76,7 @@ class Introspector(object):
 
         if isinstance(view.url, list):
             return [self._get_django_url(django_view, view, url) for url in view.url]
-        
+
         return [self._get_django_url(django_view, view, view.url)]
 
     def _get_django_url(self, django_view, view, url):

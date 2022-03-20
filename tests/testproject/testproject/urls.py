@@ -1,4 +1,10 @@
-from django.conf.urls import patterns, include, url
+from ast import Import
+
+try:
+    from django.conf.urls import patterns, include, url
+except ImportError:
+    #for django 3 and 4
+    from django.urls import patterns, include, re_path as url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
