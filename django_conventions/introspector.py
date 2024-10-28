@@ -1,4 +1,8 @@
 import pkgutil
+try:
+    import importlib
+except ImportError:
+    importlib = None
 
 try:
     from django.conf.urls import url as djangourl
@@ -29,7 +33,11 @@ class Introspector(object):
 
     def _get_module_views(self, loader, module_name, views_root):
 
-        module = loader.find_module(module_name).load_module(module_name)
+        if importlib:
+            #python 3.12
+            module = importlib.import_module(module_name)
+        else:
+            module = loader.find_module(module_name).load_module(module_name)
         return [value for value in list(module.__dict__.values()) if is_valid_view(value, views_root.__name__)]
 
     def get_django_urls(self, view):
